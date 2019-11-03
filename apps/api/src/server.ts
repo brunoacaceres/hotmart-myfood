@@ -10,8 +10,8 @@ const USERS = [
 const resolvers = {
   User: {
     name: (parent): string => {
-      console.log('Parent: ', parent)
-      return 'User: ' + parent.name
+      // console.log('Parent: ', parent)
+      return parent.name
     },
   },
   Query: {
@@ -19,7 +19,7 @@ const resolvers = {
   },
   Mutation: {
     createUser: (parent, args): typeof USERS[0] => {
-      console.log('args: ', args)
+      // console.log('args: ', args)
       const { data } = args
       const user = {
         ...data,
