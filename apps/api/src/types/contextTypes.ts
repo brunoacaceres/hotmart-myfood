@@ -1,5 +1,5 @@
 import { Models } from '.'
 
-export interface Models {
+export interface Context {
   db: Models
 }
