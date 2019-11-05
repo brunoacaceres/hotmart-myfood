@@ -22,6 +22,4 @@ const productSchema = new Schema({
   },
 })
 
-export default model<ProductDocument>('User', productSchema)
-// const UserModel = model<UserDocument>('User', productSchema)
-// const user = new UserModel()
+export default model<ProductDocument>('Product', productSchema)
