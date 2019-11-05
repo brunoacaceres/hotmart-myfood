@@ -1,6 +1,25 @@
 import { Schema, model } from 'mongoose'
 import { OrderDocument } from '../types'
-
+const orderItemSchema = new Schema(
+  {
+    product: {
+      type: Schema.Types.ObjectId,
+      ref: 'Product',
+      required: true,
+    },
+    quantity: {
+      type: Number,
+      required: true,
+    },
+    total: {
+      type: Number,
+      required: true,
+    },
+  },
+  {
+    timestamps: true,
+  },
+)
 const orderSchema = new Schema(
   {
     user: {
@@ -24,10 +43,13 @@ const orderSchema = new Schema(
       ],
       default: 'WATING_PAYMENT',
     },
+    items: [orderItemSchema],
   },
   {
     // HABILITANDO CREATEDAT, UPDATEDAT
     timestamps: true,
+    // Checar toda a estrutura de todos os schemas do arquivo
+    useNestedStrict: true,
   },
 )
 
