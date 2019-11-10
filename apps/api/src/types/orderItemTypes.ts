@@ -1,19 +1,18 @@
-import { Schema, Types } from 'mongoose'
+import { Types } from 'mongoose'
 import { Product } from '.'
 
 export interface OrderItem {
-  _id: Schema.Types.ObjectId
-  product: Product
+  _id: Types.ObjectId
+  product: Product | Types.ObjectId
   quantity: number
   total: number
   createdAt: string
   updatedAt: string
 }
 export interface OrderItemSubdocument extends OrderItem, Types.Embedded {
-  _id: Schema.Types.ObjectId
+  _id: Types.ObjectId
 }
 
-export type OrderItemCreateInput = Pick<
-  OrderItem,
-  'product' | 'quantity' | 'total'
->
+export type OrderItemCreateInput = Pick<OrderItem, 'quantity' | 'total'> & {
+  product: string
+}
