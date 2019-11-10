@@ -75,6 +75,14 @@ input OrderCreateInput {
   user: ID
 }
 
+input OrderUpdateInput {
+  status: OrderStatus
+  user: ID
+  itemstoAdd: [OrderItemCreateInput!]
+  itemstoUpdate: [OrderItemUpdateInput!]
+  itemstoDelete: [ID!]
+}
+
 type Order {
   _id: ID!
   user: User!
@@ -101,6 +109,13 @@ input OrderItemCreateInput {
   total: Float!
 }
 
+input OrderItemUpdateInput {
+  _id: ID!
+  product: ID!
+  quantity: Float!
+  total: Float!
+}
+
 type Query {
   orders: [Order!]! @auth
   order(_id: ID!): Order! @auth
@@ -112,6 +127,7 @@ type Mutation {
   signin(data: UserSignInInput!): AuthPayload!
   signup(data: UserSignUpInput!): AuthPayload!
   createOrder(data: OrderCreateInput!): Order! @auth
+  updateOrder(data: OrderUpdateInput!, _id: ID!): Order! @auth
   deleteOrder(_id: ID!): Order! @auth
   createProduct(data: ProductCreateInput!): Product!
   updateProduct(data: ProductUpdateInput!, _id: ID!): Product!
