@@ -12,3 +12,8 @@ export interface OrderItem {
 export interface OrderItemSubdocument extends OrderItem, Types.Embedded {
   _id: Schema.Types.ObjectId
 }
+
+export type OrderItemCreateInput = Pick<
+  OrderItem,
+  'product' | 'quantity' | 'total'
+>

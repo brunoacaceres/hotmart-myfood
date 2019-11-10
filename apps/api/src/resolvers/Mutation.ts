@@ -8,6 +8,8 @@ import {
   Resolver,
   UserSignUpInput,
   UserSignInInput,
+  OrderCreateArgs,
+  UserRole,
 } from '../types'
 import { findDocument, issueToken } from '../utils'
 import { CustomError } from '../errors'
@@ -84,10 +86,27 @@ const signup: Resolver<UserSignUpInput> = async (_, args, { db }) => {
   return { token, user }
 }
 
+const createOrder: Resolver<OrderCreateArgs> = async (
+  _,
+  args,
+  { db, authUser },
+) => {
+  const { data } = args
+  const { _id, role } = authUser
+  const { Order } = db
+  const user = role === UserRole.USER ? _id : data.user || _id
+
+  const total =
+    (data.items && data.items.reduce((sum, item) => sum + item.total, 0)) || 0
+  const order = await new Order({ ...data, total, user }).save()
+  return order
+}
+
 export default {
   createProduct,
   updateProduct,
   deleteProduct,
   signin,
   signup,
+  createOrder,
 }
