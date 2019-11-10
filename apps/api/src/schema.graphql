@@ -1,5 +1,5 @@
 directive @auth(role: UserRole = USER) on FIELD_DEFINITION
-
+scalar Datetime
 # User
 enum UserRole {
   USER
@@ -56,6 +56,36 @@ enum Unit {
   LT
   GR
   KG
+}
+
+#Order
+enum OrderStatus {
+  WATING_PAYMENT
+  IN_QUEUE
+  PREPARING
+  READY
+  ON_THE_WAY
+  DELIVERED
+}
+
+type Order {
+  _id: ID!
+  user: User!
+  total: Float!
+  status: OrderStatus!
+  items: [OrderItem!]!
+  createdAt: Datetime!
+  updatedAt: Datetime!
+}
+
+# OrderItem
+type OrderItem {
+  _id: ID!
+  product: Product!
+  quantity: Float!
+  total: Float!
+  createdAt: Datetime!
+  updatedAt: Datetime!
 }
 
 type Query {
