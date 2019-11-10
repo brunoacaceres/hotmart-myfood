@@ -69,6 +69,12 @@ enum OrderStatus {
   DELIVERED
 }
 
+input OrderCreateInput {
+  status: OrderStatus
+  items: [OrderItemCreateInput!]
+  user: ID
+}
+
 type Order {
   _id: ID!
   user: User!
@@ -89,6 +95,12 @@ type OrderItem {
   updatedAt: Datetime!
 }
 
+input OrderItemCreateInput {
+  product: ID!
+  quantity: Float!
+  total: Float!
+}
+
 type Query {
   orders: [Order!]! @auth
   order(_id: ID!): Order! @auth
@@ -99,6 +111,7 @@ type Query {
 type Mutation {
   signin(data: UserSignInInput!): AuthPayload!
   signup(data: UserSignUpInput!): AuthPayload!
+  createOrder(data: OrderCreateInput!): Order! @auth
   createProduct(data: ProductCreateInput!): Product!
   updateProduct(data: ProductUpdateInput!, _id: ID!): Product!
   deleteProduct(_id: ID!): Product!
