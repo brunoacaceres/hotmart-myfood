@@ -16,3 +16,5 @@ export interface OrderItemSubdocument extends OrderItem, Types.Embedded {
 export type OrderItemCreateInput = Pick<OrderItem, 'quantity' | 'total'> & {
   product: string
 }
+
+export type OrderItemUpdateInput = OrderItemCreateInput & { _id: string }
