@@ -142,11 +142,21 @@ const updateOrder: Resolver<OrderUpdateArgs> = async (
     where,
   })
   const user = !isAdmin ? userId : data.user || order.user
-  const { itemstoDelete = [] } = args.data
+  const { itemstoUpdate = [], itemstoDelete = [] } = args.data
+
+  const foundItemsToUpdate = itemstoUpdate.map(orderItem =>
+    findOrderItem(order.items, orderItem._id, 'update'),
+  )
+
   const foundItemsToDelete = itemstoDelete.map(orderItemId =>
     findOrderItem(order.items, orderItemId, 'delete'),
   )
+
+  foundItemsToUpdate.forEach((orderItem, index) =>
+    orderItem.set(itemstoUpdate[index]),
+  )
   foundItemsToDelete.forEach(orderItem => orderItem.remove())
+
   order.user = user
   return order.save()
 }

@@ -36,8 +36,8 @@ export interface OrderByIdInput {
 type OrderCreateInput = Pick<Order, 'status' | 'user'>
 
 interface OrderUpdateInput extends OrderCreateInput {
-  itemstoAdd: OrderItemCreateInput
-  itemstoUpdate: OrderItemUpdateInput
+  itemstoAdd: OrderItemCreateInput[]
+  itemstoUpdate: OrderItemUpdateInput[]
   itemstoDelete: string[]
 }
 
