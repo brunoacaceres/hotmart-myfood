@@ -22,7 +22,8 @@ const findDocument = async <T extends Document>(
     errorCode,
     extensions,
   } = opts
-
+  console.log('field ', field)
+  console.log('isMongoId ', isMongoId(value))
   if (field === '_id' && !isMongoId(value)) {
     throw new CustomError(
       `Invalid ID value for '${value}'!`,

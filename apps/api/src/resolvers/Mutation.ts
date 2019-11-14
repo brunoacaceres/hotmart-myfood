@@ -98,10 +98,13 @@ const createOrder: Resolver<OrderCreateArgs> = async (
   const { data } = args
   const { _id, role } = authUser
   const { Order } = db
-  const user = role === UserRole.USER ? _id : data.user || _id
-
+  // const user = role === UserRole.USER ? _id : data.user || _id
+  const user = role === UserRole.USER ? _id : (data && data.user) || _id
   const total =
-    (data.items && data.items.reduce((sum, item) => sum + item.total, 0)) || 0
+    (data &&
+      data.items &&
+      data.items.reduce((sum, item) => sum + item.total, 0)) ||
+    0
   const order = await new Order({ ...data, total, user }).save()
   return order
 }
@@ -133,13 +136,16 @@ const updateOrder: Resolver<OrderUpdateArgs> = async (
   const { data, _id } = args
   const { _id: userId, role } = authUser
   const isAdmin = role === UserRole.ADMIN
-
   const where = !isAdmin ? { _id, user: userId } : null
+  console.log('_id ', _id)
+  console.log('userId ', userId)
+  console.log('where ', where)
+
   const order = await findDocument<OrderDocument>({
     db,
     model: 'Order',
     field: '_id',
-    value: '_id',
+    value: _id,
     where,
   })
   const user = !isAdmin ? userId : data.user || order.user
