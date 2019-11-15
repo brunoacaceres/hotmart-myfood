@@ -1,5 +1,5 @@
 import { SignOptions, sign } from 'jsonwebtoken'
-import { Document, Model, Types, DocumentQuery } from 'mongoose'
+import { Document, DocumentQuery, Model, Types } from 'mongoose'
 import {
   FindDocumentOptions,
   OrderItemSubdocument,
