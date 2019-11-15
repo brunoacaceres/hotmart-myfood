@@ -30,13 +30,10 @@ const order: Resolver<OrderByIdArgs> = (_, args, { db, authUser }) => {
 }
 
 const products: Resolver<PaginationArgs> = (_, args, { db }) => {
-  // const { skip = 0, limit = 10 } = args
   const { Product } = db
+  console.log('Where ', args.where)
   console.log('orderBy: ', args.orderBy)
   return paginateAndSort(Product.find(), args)
-  //   return Product.find()
-  //     .skip(skip)
-  //     .limit(limit <= 20 ? limit : 20)
 }
 const product: Resolver<ProductByIdArgs> = async (_, args, { db }) => {
   const { _id } = args

@@ -83,14 +83,6 @@ const paginateAndSort = <TDoc extends Document>(
   // orderBy:  [ 'name', '-price' ]
 }
 
-/*
-['name', 'price', 'unit']
-{ 
-  name_ASC: 'name'
-  name_DESC: '-name'
-
-}
- */
 const buildOrderByResolvers = (fields: string[]): Record<string, string> =>
   fields.reduce(
     (resolvers, field) => ({
@@ -101,7 +93,77 @@ const buildOrderByResolvers = (fields: string[]): Record<string, string> =>
     {},
   )
 
+const operators = [
+  { name: 'Eq', op: '$eq' },
+  { name: 'Ne', op: '$ne' },
+  { name: 'Lt', op: '$lt' },
+  { name: 'Lte', op: '$lte' },
+  { name: 'Gt', op: '$gt' },
+  { name: 'Gte', op: '$gte' },
+  { name: 'In', op: '$in' },
+  { name: 'Nin', op: '$nin' },
+  { name: 'Regex', op: '$regex' },
+  { name: 'Options', op: '$options' },
+]
+
+/* 
+where:{
+  priceGt: 6,
+  priceLt: 10,
+  OR: [
+    { nameEq: "Coca-Cola"}
+  ]
+}
+Object.keys
+['priceGt', 'priceLt', 'OR']
+
+{
+  price: { $gt: 6, $lt: 10 },
+  $or: [
+    { 
+      name: { $eq: 'Coca-Cola'} ,
+    }
+  ]
+}
+
+*/
+
+const buildConditions = (where: Record<string, any>): Record<string, any> =>
+  Object.keys(where).reduce((conditions, whereKey) => {
+    const operator = operators.find(({ name }) =>
+      new RegExp(`${name}$`).test(whereKey),
+    )
+    const fieldName = operator
+      ? whereKey.replace(operator.name, '') // price
+      : '$' + whereKey.toLowerCase() // $or
+    const fieldValue = operator
+      ? {
+          ...conditions[fieldName],
+          [operator.op]: where[whereKey],
+        }
+      : // Tratando condicoes OR, NOR, AND
+        where[whereKey].map(buildConditions)
+
+    return {
+      ...conditions,
+      [fieldName]: fieldValue,
+    }
+  }, {})
+
+// console.log(
+//   'Build Conditions: ',
+//   require('util').inspect(
+//     buildConditions({
+//       priceGt: 6,
+//       priceLt: 10,
+//       OR: [{ nameEq: 'Coca-Cola' }],
+//     }),
+//     { depth: null },
+//   ),
+// )
+
 export {
+  buildConditions,
   buildOrderByResolvers,
   findDocument,
   findOrderItem,
