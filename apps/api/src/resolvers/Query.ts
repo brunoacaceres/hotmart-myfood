@@ -32,8 +32,8 @@ const order: Resolver<OrderByIdArgs> = (_, args, { db, authUser }) => {
 const products: Resolver<PaginationArgs> = (_, args, { db }) => {
   // const { skip = 0, limit = 10 } = args
   const { Product } = db
+  console.log('orderBy: ', args.orderBy)
   return paginateAndSort(Product.find(), args)
-  // console.log('orderBy: ', args.orderBy)
   //   return Product.find()
   //     .skip(skip)
   //     .limit(limit <= 20 ? limit : 20)

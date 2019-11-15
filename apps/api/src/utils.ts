@@ -75,8 +75,12 @@ const paginateAndSort = <TDoc extends Document>(
   query: DocumentQuery<TDoc[], TDoc>,
   args: PaginationArgs,
 ): DocumentQuery<TDoc[], TDoc> => {
-  const { skip = 0, limit = 10 } = args
-  return query.skip(skip).limit(limit <= 20 ? limit : 20)
+  const { skip = 0, limit = 10, orderBy = [] } = args
+  return query
+    .skip(skip)
+    .limit(limit <= 20 ? limit : 20)
+    .sort(orderBy.join(' '))
+  // orderBy:  [ 'name', '-price' ]
 }
 
 /*
