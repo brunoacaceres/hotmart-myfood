@@ -7,16 +7,13 @@ import {
   Resolver,
   UserRole,
 } from '../types'
-import { findDocument } from '../utils'
+import { findDocument, paginateAndSort } from '../utils'
 
 const orders: Resolver<PaginationArgs> = (_, args, { db, authUser }) => {
-  const { skip = 0, limit = 10 } = args
   const { _id, role } = authUser
   const { Order } = db
   const conditions = role === UserRole.USER ? { user: _id } : {}
-  return Order.find(conditions)
-    .skip(skip)
-    .limit(limit <= 20 ? limit : 20)
+  return paginateAndSort(Order.find(conditions), args)
 }
 
 const order: Resolver<OrderByIdArgs> = (_, args, { db, authUser }) => {
@@ -33,11 +30,13 @@ const order: Resolver<OrderByIdArgs> = (_, args, { db, authUser }) => {
 }
 
 const products: Resolver<PaginationArgs> = (_, args, { db }) => {
-  const { skip = 0, limit = 10 } = args
+  // const { skip = 0, limit = 10 } = args
   const { Product } = db
-  return Product.find()
-    .skip(skip)
-    .limit(limit <= 20 ? limit : 20)
+  return paginateAndSort(Product.find(), args)
+  // console.log('orderBy: ', args.orderBy)
+  //   return Product.find()
+  //     .skip(skip)
+  //     .limit(limit <= 20 ? limit : 20)
 }
 const product: Resolver<ProductByIdArgs> = async (_, args, { db }) => {
   const { _id } = args
