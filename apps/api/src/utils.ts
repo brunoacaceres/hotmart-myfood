@@ -80,7 +80,6 @@ const paginateAndSort = <TDoc extends Document>(
     .skip(skip)
     .limit(limit <= 20 ? limit : 20)
     .sort(orderBy.join(' '))
-  // orderBy:  [ 'name', '-price' ]
 }
 
 const buildOrderByResolvers = (fields: string[]): Record<string, string> =>
@@ -106,29 +105,9 @@ const operators = [
   { name: 'Options', op: '$options' },
 ]
 
-/* 
-where:{
-  priceGt: 6,
-  priceLt: 10,
-  OR: [
-    { nameEq: "Coca-Cola"}
-  ]
-}
-Object.keys
-['priceGt', 'priceLt', 'OR']
-
-{
-  price: { $gt: 6, $lt: 10 },
-  $or: [
-    { 
-      name: { $eq: 'Coca-Cola'} ,
-    }
-  ]
-}
-
-*/
-
-const buildConditions = (where: Record<string, any>): Record<string, any> =>
+const buildConditions = (
+  where: Record<string, any> = {},
+): Record<string, any> =>
   Object.keys(where).reduce((conditions, whereKey) => {
     const operator = operators.find(({ name }) =>
       new RegExp(`${name}$`).test(whereKey),
@@ -149,18 +128,6 @@ const buildConditions = (where: Record<string, any>): Record<string, any> =>
       [fieldName]: fieldValue,
     }
   }, {})
-
-// console.log(
-//   'Build Conditions: ',
-//   require('util').inspect(
-//     buildConditions({
-//       priceGt: 6,
-//       priceLt: 10,
-//       OR: [{ nameEq: 'Coca-Cola' }],
-//     }),
-//     { depth: null },
-//   ),
-// )
 
 export {
   buildConditions,
