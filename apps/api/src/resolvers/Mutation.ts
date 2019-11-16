@@ -137,9 +137,6 @@ const updateOrder: Resolver<OrderUpdateArgs> = async (
   const { _id: userId, role } = authUser
   const isAdmin = role === UserRole.ADMIN
   const where = !isAdmin ? { _id, user: userId } : null
-  console.log('_id ', _id)
-  console.log('userId ', userId)
-  console.log('where ', where)
 
   const order = await findDocument<OrderDocument>({
     db,

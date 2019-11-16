@@ -12,9 +12,9 @@ const logMiddleware: IMiddlewareResolver<any, Context> = async (
     fieldName,
     operation: { operation },
   } = info
-  console.log(`Log: before '${operation} ${fieldName}'`)
+  // console.log(`Log: before '${operation} ${fieldName}'`)
   const result = await resolve(source, args, ctx, info)
-  console.log(`Log: after '${operation} ${fieldName}'`)
+  // console.log(`Log: after '${operation} ${fieldName}'`)
   return result
 }
 

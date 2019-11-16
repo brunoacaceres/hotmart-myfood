@@ -23,8 +23,8 @@ const findDocument = async <T extends Document>(
     errorCode,
     extensions,
   } = opts
-  console.log('field ', field)
-  console.log('isMongoId ', isMongoId(value))
+  // console.log('field ', field)
+  // console.log('isMongoId ', isMongoId(value))
   if (field === '_id' && !isMongoId(value)) {
     throw new CustomError(
       `Invalid ID value for '${value}'!`,
@@ -105,10 +105,24 @@ const operators = [
   { name: 'Options', op: '$options' },
 ]
 
+const idFields = ['user']
+
 const buildConditions = (
   where: Record<string, any> = {},
 ): Record<string, any> =>
   Object.keys(where).reduce((conditions, whereKey) => {
+    if (idFields.some(idField => whereKey.includes(idField))) {
+      const ids: string[] = Array.isArray(where[whereKey])
+        ? where[whereKey]
+        : [where[whereKey]]
+      if (ids.some(id => !isMongoId(id))) {
+        throw new CustomError(
+          `Invalid ID value for condition '${whereKey}'!`,
+          'INVALID_ID_ERROR',
+        )
+      }
+    }
+
     const operator = operators.find(({ name }) =>
       new RegExp(`${name}$`).test(whereKey),
     )
