@@ -7,7 +7,11 @@ const order: SubscriptionResolver<Order> = {
     const channels = mutationIn.map(m => `ORDER_${m}`)
     return pubsub.asyncIterator(channels)
   },
-  resolve: payload => payload,
+  // resolve: payload => payload,
+  resolve: payload => {
+    console.log('Payload: ', payload)
+    return payload
+  },
 }
 
 export default {
