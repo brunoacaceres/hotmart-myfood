@@ -9,7 +9,6 @@ const order: SubscriptionResolver<Order> = {
   },
   // resolve: payload => payload,
   resolve: payload => {
-    console.log('Payload: ', payload)
     return payload
   },
 }
