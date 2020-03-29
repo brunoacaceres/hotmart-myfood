@@ -4,6 +4,7 @@ import Order from './Order'
 import OrderItem from './OrderItem'
 import OrderOrderByInput from './OrderOrderByInput'
 import ProductOrderByInput from './ProductOrderByInput'
+import Subscription from './Subscription'
 
 // console.log('Resolver: ', OrderOrderByInput)
 
@@ -14,4 +15,5 @@ export default {
   OrderItem,
   OrderOrderByInput,
   ProductOrderByInput,
+  Subscription,
 }
